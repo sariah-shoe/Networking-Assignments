@@ -31,6 +31,8 @@ def verifyInput(move):
 
 # Function for the player to make their move
 def makeMove(coord, player):
+    global clientFlags
+    
     # Change the gamestate, moves, and flags according to the user's move
     if player == "X":
         gamestate[coord[1]][coord[0]] = 0b01
@@ -163,6 +165,7 @@ def main():
         if(servGameId != gameId):
             print("Game id from the server doesn't match game id for the client")
             running = False
+            continue
         
         # Check that the serial id is valid
         if(clientSerial == 0):
@@ -171,6 +174,7 @@ def main():
             if(messId != 0):
                 print("Server's message came out of order")
                 running = False
+                continue
         
         # If the messId is at 255 set it to 0, otherwise increase by 1
         if(messId == 255):
@@ -205,16 +209,20 @@ def main():
         # Check win conditions and end the game if its won
         elif(flags == possFlags[2]):
             running = False
+            continue
             
         elif(flags == possFlags[3]):
             running = False
+            continue
             
         elif(flags == possFlags[4]):
             running = False
+            continue
         
         # If there is an error end the game
         elif(flags == possFlags[5]):
             running = False
+            continue
         
         # Encode the game state and message and send it to the server
         rawState = encode_game_state(gamestate)
